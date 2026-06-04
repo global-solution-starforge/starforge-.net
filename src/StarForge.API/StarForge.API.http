@@ -1,0 +1,6 @@
+@StarForge.API_HostAddress = http://localhost:5212
+
+GET {{StarForge.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
