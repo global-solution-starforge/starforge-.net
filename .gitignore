@@ -52,3 +52,6 @@ secrets.json
 ## OS
 .DS_Store
 Thumbs.db
+
+
+launchSettings.json
