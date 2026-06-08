@@ -20,6 +20,6 @@ public record CriarContribuicaoDto(
     /// <summary>Valor em reais da contribuição. Deve ser maior que R$ 0,01.</summary>
     [Required][Range(0.01, double.MaxValue)] decimal Valor,
 
-    /// <summary>Forma de pagamento selecionada (Pix ou Cartão).</summary>
-    [Required] MetodoPagamento MetodoPagamento
+    /// <summary>Forma de pagamento selecionada. Deve ser um valor válido do enum <see cref="MetodoPagamento"/>.</summary>
+    [Required][EnumDataType(typeof(MetodoPagamento))] MetodoPagamento MetodoPagamento
 );

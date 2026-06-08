@@ -10,11 +10,11 @@ public record CriarFaseMissaoDto(
     /// <summary>ID da missão à qual a fase pertence.</summary>
     [Required] Guid MissaoId,
 
-    /// <summary>Título de exibição da fase (máx. 100 caracteres).</summary>
-    [Required][MaxLength(100)] string Titulo,
+    /// <summary>Título de exibição da fase (mín. 3, máx. 100 caracteres).</summary>
+    [Required][MinLength(3)][MaxLength(100)] string Titulo,
 
-    /// <summary>Descrição do que ocorre nesta fase (máx. 500 caracteres).</summary>
-    [Required][MaxLength(500)] string Descricao,
+    /// <summary>Descrição do que ocorre nesta fase (mín. 10, máx. 500 caracteres).</summary>
+    [Required][MinLength(10)][MaxLength(500)] string Descricao,
 
     /// <summary>Número de sequência para ordenação (1, 2, 3...). Deve ser positivo.</summary>
     [Required][Range(1, int.MaxValue)] int Ordem

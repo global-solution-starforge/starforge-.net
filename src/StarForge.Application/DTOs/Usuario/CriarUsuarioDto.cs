@@ -7,14 +7,14 @@ namespace StarForge.Application.DTOs.Usuario;
 /// Endpoint: <c>POST /api/usuarios</c> (acesso público — não requer autenticação).
 /// </summary>
 public record CriarUsuarioDto(
-    /// <summary>Nome completo do piloto (máx. 100 caracteres).</summary>
-    [Required][MaxLength(100)] string Nome,
+    /// <summary>Nome completo do piloto (mín. 3, máx. 100 caracteres).</summary>
+    [Required][MinLength(3)][MaxLength(100)] string Nome,
 
     /// <summary>E-mail único de acesso. Utilizado como login.</summary>
     [Required][EmailAddress][MaxLength(100)] string Email,
 
-    /// <summary>RM do aluno FIAP (máx. 20 caracteres). Deve ser único na plataforma.</summary>
-    [Required][MaxLength(20)] string Rm,
+    /// <summary>RM do aluno FIAP (mín. 2, máx. 20 caracteres). Deve ser único na plataforma.</summary>
+    [Required][MinLength(2)][MaxLength(20)] string Rm,
 
     /// <summary>Senha em texto puro (mín. 6, máx. 100 caracteres). Será armazenada como hash BCrypt.</summary>
     [Required][MinLength(6)][MaxLength(100)] string Senha,
@@ -22,6 +22,7 @@ public record CriarUsuarioDto(
     /// <summary>
     /// Papel do usuário no sistema. Padrão: <c>"User"</c>.
     /// Use <c>"Admin"</c> para conceder permissões administrativas.
+    /// Valores permitidos: <c>"User"</c> ou <c>"Admin"</c>.
     /// </summary>
-    string Role = "User"
+    [MaxLength(20)][RegularExpression(@"^(User|Admin)$", ErrorMessage = "Role deve ser 'User' ou 'Admin'.")] string Role = "User"
 );
