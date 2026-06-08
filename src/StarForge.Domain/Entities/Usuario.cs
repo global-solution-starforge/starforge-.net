@@ -2,49 +2,65 @@ namespace StarForge.Domain.Entities;
 
 /// <summary>
 /// Representa o jogador/piloto cadastrado na plataforma StarForge.
-/// O nível é atualizado automaticamente conforme o total contribuído aumenta.
 /// </summary>
+/// <remarks>
+/// O nível é calculado automaticamente com base no total acumulado de contribuições confirmadas:
+/// <list type="bullet">
+///   <item><term>RECRUTA</term><description>Menos de R$ 100,00</description></item>
+///   <item><term>OPERATIVO</term><description>De R$ 100,00 a R$ 499,99</description></item>
+///   <item><term>VETERANO</term><description>De R$ 500,00 a R$ 1.999,99</description></item>
+///   <item><term>COMANDANTE</term><description>R$ 2.000,00 ou mais</description></item>
+/// </list>
+/// </remarks>
 public class Usuario
 {
-    /// <summary>Identificador único do usuário (chave primária).</summary>
+    /// <summary>Identificador único do usuário (chave primária, gerado automaticamente).</summary>
     public Guid Id { get; private set; }
 
-    /// <summary>Nome completo do piloto.</summary>
+    /// <summary>Nome completo do piloto exibido na plataforma.</summary>
     public string Nome { get; private set; }
 
-    /// <summary>Email de acesso à plataforma. Deve ser único.</summary>
+    /// <summary>E-mail de acesso único na plataforma. Utilizado como login.</summary>
     public string Email { get; private set; }
 
-    /// <summary>RM do aluno FIAP. Deve ser único.</summary>
+    /// <summary>Número de Registro do Modelo (RM) do aluno FIAP. Único por usuário.</summary>
     public string Rm { get; private set; }
 
-    /// <summary>Hash bcrypt da senha do usuário.</summary>
+    /// <summary>Hash BCrypt da senha. Nunca armazena senha em texto puro.</summary>
     public string SenhaHash { get; private set; }
 
-    /// <summary>Indica se a conta está ativa.</summary>
+    /// <summary>Indica se a conta está ativa. Contas desativadas não podem fazer login.</summary>
     public bool Ativo { get; private set; }
 
     /// <summary>
-    /// Nível do piloto calculado com base no total contribuído.
-    /// RECRUTA menos de R$100, OPERATIVO R$100 a R$499,
-    /// VETERANO R$500 a R$1999, COMANDANTE R$2000 ou mais.
+    /// Nível hierárquico do piloto, atualizado automaticamente por <see cref="AdicionarContribuicao"/>.
+    /// Valores possíveis: RECRUTA, OPERATIVO, VETERANO, COMANDANTE.
     /// </summary>
     public string Nivel { get; private set; }
 
-    /// <summary>Soma de todas as contribuições confirmadas do usuário.</summary>
+    /// <summary>Soma de todas as contribuições com status <c>Confirmada</c>.</summary>
     public decimal TotalContribuido { get; private set; }
 
-    /// <summary>Data de criação da conta.</summary>
+    /// <summary>Data e hora (UTC) em que a conta foi criada.</summary>
     public DateTime DataCadastro { get; private set; }
 
-    /// <summary>Papel do usuário no sistema (User, Admin).</summary>
+    /// <summary>
+    /// Papel do usuário para controle de acesso baseado em roles (RBAC).
+    /// Valores esperados: <c>"User"</c> (padrão) ou <c>"Admin"</c>.
+    /// </summary>
     public string Role { get; private set; }
 
-    /// <summary>Contribuições realizadas por este usuário.</summary>
+    /// <summary>
+    /// Coleção somente-leitura das contribuições deste usuário.
+    /// Carregada pelo EF Core via lazy/eager loading quando necessário.
+    /// </summary>
     public IReadOnlyCollection<Contribuicao> Contribuicoes => _contribuicoes.AsReadOnly();
     private readonly List<Contribuicao> _contribuicoes = [];
 
-    /// <summary>Construtor privado reservado ao EF Core.</summary>
+    /// <summary>
+    /// Construtor privado sem parâmetros exigido pelo EF Core para materialização de entidades.
+    /// Não utilizar diretamente no código da aplicação.
+    /// </summary>
     private Usuario()
     {
         Nome = null!;
@@ -55,7 +71,15 @@ public class Usuario
         Role = null!;
     }
 
-    /// <summary>Cria um novo usuário com os dados obrigatórios.</summary>
+    /// <summary>
+    /// Cria um novo usuário com os dados obrigatórios.
+    /// O nível inicial é sempre RECRUTA e a conta começa ativa.
+    /// </summary>
+    /// <param name="nome">Nome completo do piloto.</param>
+    /// <param name="email">E-mail único de acesso.</param>
+    /// <param name="rm">RM do aluno FIAP (único no sistema).</param>
+    /// <param name="senhaHash">Hash BCrypt da senha (gerado antes de chamar o construtor).</param>
+    /// <param name="role">Papel no sistema. Padrão: <c>"User"</c>.</param>
     public Usuario(string nome, string email, string rm, string senhaHash, string role = "User")
     {
         Id = Guid.NewGuid();
@@ -64,33 +88,50 @@ public class Usuario
         Rm = rm;
         SenhaHash = senhaHash;
         Ativo = true;
-        Nivel = "RECRUTA";
+        Nivel = "RECRUTA";        // Todo piloto começa como recruta
         TotalContribuido = 0;
         DataCadastro = DateTime.UtcNow;
         Role = role;
     }
 
-    /// <summary>Atualiza os dados de perfil do usuário.</summary>
+    /// <summary>
+    /// Atualiza nome e e-mail do perfil do usuário.
+    /// A unicidade do e-mail deve ser validada pelo serviço antes de chamar este método.
+    /// </summary>
+    /// <param name="nome">Novo nome completo.</param>
+    /// <param name="email">Novo e-mail (deve ser único na base).</param>
     public void AtualizarDados(string nome, string email)
     {
         Nome = nome;
         Email = email;
     }
 
-    /// <summary>Substitui o hash da senha pelo novo valor gerado.</summary>
+    /// <summary>
+    /// Substitui o hash da senha atual pelo novo hash gerado.
+    /// </summary>
+    /// <param name="novoHash">Novo hash BCrypt da nova senha.</param>
     public void AtualizarSenha(string novoHash) => SenhaHash = novoHash;
 
-    /// <summary>Desativa a conta do usuário (soft delete).</summary>
+    /// <summary>
+    /// Desativa a conta do usuário (soft delete).
+    /// Usuários desativados não conseguem fazer login, mas seus dados são preservados.
+    /// </summary>
     public void Desativar() => Ativo = false;
 
-    /// <summary>Acumula o valor de uma contribuição confirmada e recalcula o nível.</summary>
+    /// <summary>
+    /// Registra uma contribuição confirmada, acumulando o valor no total e recalculando o nível.
+    /// </summary>
+    /// <param name="valor">Valor confirmado da contribuição (deve ser positivo).</param>
     public void AdicionarContribuicao(decimal valor)
     {
         TotalContribuido += valor;
-        AtualizarNivel();
+        AtualizarNivel(); // Recalcula o nível após cada contribuição confirmada
     }
 
-    /// <summary>Recalcula o nível do piloto com base no total contribuído acumulado.</summary>
+    /// <summary>
+    /// Recalcula o nível hierárquico do piloto com base no total acumulado.
+    /// Chamado automaticamente por <see cref="AdicionarContribuicao"/>.
+    /// </summary>
     private void AtualizarNivel()
     {
         Nivel = TotalContribuido switch

@@ -7,8 +7,15 @@ using StarForge.Domain.Entities;
 
 namespace StarForge.Application.Services;
 
+/// <summary>
+/// Implementação do serviço de consulta do hangar do usuário.
+/// Carrega os hangares e enriquece cada um com os dados da nave correspondente.
+/// </summary>
+/// <param name="hangarRepo">Repositório de hangares.</param>
+/// <param name="naveRepo">Repositório de naves — usado para buscar detalhes de cada nave.</param>
 public class HangarService(IHangarRepository hangarRepo, INaveRepository naveRepo) : IHangarService
 {
+    /// <inheritdoc />
     public async Task<IEnumerable<HangarDto>> GetByUsuarioIdAsync(Guid usuarioId)
     {
         var hangares = await hangarRepo.GetByUsuarioIdAsync(usuarioId);
@@ -16,7 +23,10 @@ public class HangarService(IHangarRepository hangarRepo, INaveRepository naveRep
 
         foreach (var h in hangares)
         {
+            // Carrega os dados da nave para cada hangar individualmente
             var nave = await naveRepo.GetByIdAsync(h.NaveId);
+
+            // Fallback defensivo: se a nave não for encontrada, retorna dados mínimos
             var naveDto = nave is null
                 ? new NaveDto(h.NaveId, "Desconhecida", "", "", "", null, h.MissaoId)
                 : new NaveDto(nave.Id, nave.Nome, nave.Modelo, nave.Descricao, nave.Raridade, nave.ImagemUrl, nave.MissaoId);
@@ -27,6 +37,7 @@ public class HangarService(IHangarRepository hangarRepo, INaveRepository naveRep
         return dtos;
     }
 
+    /// <inheritdoc />
     public async Task<HangarDto> GetByIdAsync(Guid id)
     {
         var hangar = await hangarRepo.GetByIdAsync(id)
