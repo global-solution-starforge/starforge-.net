@@ -55,3 +55,8 @@ Thumbs.db
 
 
 launchSettings.json
+
+.claude/
+## Configuração local com credenciais
+appsettings.Development.local.json
+appsettings.*.local.json
