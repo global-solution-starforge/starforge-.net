@@ -1,0 +1,42 @@
+using StarForge.Application.DTOs.Hangar;
+using StarForge.Application.DTOs.Nave;
+using StarForge.Application.Exceptions;
+using StarForge.Application.Interfaces;
+using StarForge.Application.Interfaces.Services;
+using StarForge.Domain.Entities;
+
+namespace StarForge.Application.Services;
+
+public class HangarService(IHangarRepository hangarRepo, INaveRepository naveRepo) : IHangarService
+{
+    public async Task<IEnumerable<HangarDto>> GetByUsuarioIdAsync(Guid usuarioId)
+    {
+        var hangares = await hangarRepo.GetByUsuarioIdAsync(usuarioId);
+        var dtos = new List<HangarDto>();
+
+        foreach (var h in hangares)
+        {
+            var nave = await naveRepo.GetByIdAsync(h.NaveId);
+            var naveDto = nave is null
+                ? new NaveDto(h.NaveId, "Desconhecida", "", "", "", null, h.MissaoId)
+                : new NaveDto(nave.Id, nave.Nome, nave.Modelo, nave.Descricao, nave.Raridade, nave.ImagemUrl, nave.MissaoId);
+
+            dtos.Add(new HangarDto(h.Id, h.UsuarioId, h.MissaoId, h.Status, h.DataAquisicao, naveDto));
+        }
+
+        return dtos;
+    }
+
+    public async Task<HangarDto> GetByIdAsync(Guid id)
+    {
+        var hangar = await hangarRepo.GetByIdAsync(id)
+            ?? throw new NotFoundException(nameof(Hangar), id);
+
+        var nave = await naveRepo.GetByIdAsync(hangar.NaveId);
+        var naveDto = nave is null
+            ? new NaveDto(hangar.NaveId, "Desconhecida", "", "", "", null, hangar.MissaoId)
+            : new NaveDto(nave.Id, nave.Nome, nave.Modelo, nave.Descricao, nave.Raridade, nave.ImagemUrl, nave.MissaoId);
+
+        return new HangarDto(hangar.Id, hangar.UsuarioId, hangar.MissaoId, hangar.Status, hangar.DataAquisicao, naveDto);
+    }
+}
