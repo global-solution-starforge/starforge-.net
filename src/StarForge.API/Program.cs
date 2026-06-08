@@ -40,7 +40,8 @@ builder.Services.AddScoped<IHangarService, HangarService>();
 builder.Services.AddScoped<IFaseMissaoService, FaseMissaoService>();
 
 // JWT Authentication
-var jwtKey = builder.Configuration["Jwt:Key"]!;
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? "StarForge@FallbackKey256BitsForDevelopment!!";
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
