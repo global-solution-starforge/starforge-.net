@@ -41,7 +41,7 @@ public class FaseMissaoConfiguration : IEntityTypeConfiguration<FaseMissao>
         builder.Property(f => f.DataConclusao).HasColumnType("TIMESTAMP");
 
         // Relacionamento explícito: uma FaseMissao pertence a uma Missão (CASCADE — fase sem missão não faz sentido)
-        builder.HasOne<Missao>()
+        builder.HasOne<Missao>(f => f.Missao)
             .WithMany(m => m.Fases)
             .HasForeignKey(f => f.MissaoId)
             .OnDelete(DeleteBehavior.Cascade);

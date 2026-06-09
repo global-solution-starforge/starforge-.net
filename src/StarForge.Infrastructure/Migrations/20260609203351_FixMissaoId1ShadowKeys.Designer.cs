@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oracle.EntityFrameworkCore.Metadata;
 using StarForge.Infrastructure.Data;
@@ -11,9 +12,11 @@ using StarForge.Infrastructure.Data;
 namespace StarForge.Infrastructure.Migrations
 {
     [DbContext(typeof(StarForgeDbContext))]
-    partial class StarForgeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260609203351_FixMissaoId1ShadowKeys")]
+    partial class FixMissaoId1ShadowKeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

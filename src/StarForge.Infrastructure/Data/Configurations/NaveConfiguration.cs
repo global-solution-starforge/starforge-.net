@@ -37,7 +37,7 @@ public class NaveConfiguration : IEntityTypeConfiguration<Nave>
         builder.Property(n => n.ImagemUrl).HasColumnType("VARCHAR2(255)");
 
         // Relacionamento explícito: uma Nave pertence a uma Missão (CASCADE — nave sem missão não faz sentido)
-        builder.HasOne<Missao>()
+        builder.HasOne<Missao>(n => n.Missao)
             .WithMany(m => m.Naves)
             .HasForeignKey(n => n.MissaoId)
             .OnDelete(DeleteBehavior.Cascade);

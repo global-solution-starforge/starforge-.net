@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using StarForge.Application.Exceptions;
+using StarForge.Domain.Exceptions;
 using AppValidationException = StarForge.Application.Exceptions.ValidationException;
 
 namespace StarForge.API.Middlewares;
@@ -63,6 +64,13 @@ public class ExceptionHandlingMiddleware(RequestDelegate next, ILogger<Exception
                 Type = "https://tools.ietf.org/html/rfc7231#section-6.5.4"
             },
             BusinessRuleException => new ProblemDetails
+            {
+                Status = StatusCodes.Status422UnprocessableEntity,
+                Title = "Regra de negócio violada",
+                Detail = exception.Message,
+                Type = "https://tools.ietf.org/html/rfc4918#section-11.2"
+            },
+            DomainException => new ProblemDetails
             {
                 Status = StatusCodes.Status422UnprocessableEntity,
                 Title = "Regra de negócio violada",

@@ -37,7 +37,7 @@ public class TierConfiguration : IEntityTypeConfiguration<Tier>
         builder.Property(t => t.VagasOcupadas).HasColumnType("NUMBER(10)");
 
         // Relacionamento explícito: um Tier pertence a uma Missão (CASCADE — tier sem missão não faz sentido)
-        builder.HasOne<Missao>()
+        builder.HasOne<Missao>(t => t.Missao)
             .WithMany(m => m.Tiers)
             .HasForeignKey(t => t.MissaoId)
             .OnDelete(DeleteBehavior.Cascade);
