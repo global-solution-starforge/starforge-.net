@@ -13,12 +13,12 @@ public class AuthControllerTests(StarForgeWebApplicationFactory factory)
 {
     private readonly HttpClient _client = factory.CreateClient();
 
-    private async Task SeedUsuarioAsync(string email, string rm, string senha)
+    private async Task SeedUsuarioAsync(string email, string senha)
     {
         using var scope = factory.Services.CreateScope();
         var repo = scope.ServiceProvider.GetRequiredService<IUsuarioRepository>();
         var hash = BCrypt.Net.BCrypt.HashPassword(senha);
-        var usuario = new Usuario("Teste", email, rm, hash, "User");
+        var usuario = new Usuario("Teste", email, hash, "User");
         await repo.AddAsync(usuario);
         await repo.SaveChangesAsync();
     }
@@ -28,7 +28,7 @@ public class AuthControllerTests(StarForgeWebApplicationFactory factory)
     {
         const string email = "auth_test@fiap.com.br";
         const string senha = "Senha@123";
-        await SeedUsuarioAsync(email, "RM99001", senha);
+        await SeedUsuarioAsync(email, senha);
 
         var response = await _client.PostAsJsonAsync("/api/auth/login", new LoginDto(email, senha));
 
@@ -43,7 +43,7 @@ public class AuthControllerTests(StarForgeWebApplicationFactory factory)
     public async Task Login_ComSenhaErrada_DeveRetornar422()
     {
         const string email = "auth_wrong@fiap.com.br";
-        await SeedUsuarioAsync(email, "RM99002", "SenhaCorreta@123");
+        await SeedUsuarioAsync(email, "SenhaCorreta@123");
 
         var response = await _client.PostAsJsonAsync("/api/auth/login", new LoginDto(email, "SenhaErrada@999"));
 

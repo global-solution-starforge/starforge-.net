@@ -39,7 +39,6 @@ public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
         // Dados pessoais — todos VARCHAR2 com tamanhos máximos controlados
         builder.Property(u => u.Nome).HasColumnType("VARCHAR2(100)").IsRequired();
         builder.Property(u => u.Email).HasColumnType("VARCHAR2(100)").IsRequired();
-        builder.Property(u => u.Rm).HasColumnType("VARCHAR2(20)").IsRequired();
         builder.Property(u => u.SenhaHash).HasColumnType("VARCHAR2(255)").IsRequired();  // Hash BCrypt tem ~60 chars, mas 255 dá margem
         builder.Property(u => u.Nivel).HasColumnType("VARCHAR2(20)").IsRequired();       // Iniciante, Explorador, Veterano, Elite
         builder.Property(u => u.Role).HasColumnType("VARCHAR2(20)").IsRequired();        // User ou Admin
@@ -55,9 +54,8 @@ public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
             .HasColumnType("NUMBER(1)")
             .HasConversion(v => v ? 1 : 0, v => v == 1);
 
-        // Índices únicos para garantir unicidade de email e RM em nível de banco
+        // Índice único para garantir unicidade de e-mail em nível de banco
         builder.HasIndex(u => u.Email).IsUnique().HasDatabaseName("IX_USUARIO_EMAIL");
-        builder.HasIndex(u => u.Rm).IsUnique().HasDatabaseName("IX_USUARIO_RM");
 
         // Um usuário pode ter muitas contribuições; Restrict evita exclusão de usuário com histórico
         builder.HasMany(u => u.Contribuicoes)

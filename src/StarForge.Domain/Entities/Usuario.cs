@@ -23,9 +23,6 @@ public class Usuario
     /// <summary>E-mail de acesso único na plataforma. Utilizado como login.</summary>
     public string Email { get; private set; }
 
-    /// <summary>Número de Registro do Modelo (RM) do aluno FIAP. Único por usuário.</summary>
-    public string Rm { get; private set; }
-
     /// <summary>Hash BCrypt da senha. Nunca armazena senha em texto puro.</summary>
     public string SenhaHash { get; private set; }
 
@@ -65,7 +62,6 @@ public class Usuario
     {
         Nome = null!;
         Email = null!;
-        Rm = null!;
         SenhaHash = null!;
         Nivel = null!;
         Role = null!;
@@ -77,15 +73,13 @@ public class Usuario
     /// </summary>
     /// <param name="nome">Nome completo do piloto.</param>
     /// <param name="email">E-mail único de acesso.</param>
-    /// <param name="rm">RM do aluno FIAP (único no sistema).</param>
     /// <param name="senhaHash">Hash BCrypt da senha (gerado antes de chamar o construtor).</param>
     /// <param name="role">Papel no sistema. Padrão: <c>"User"</c>.</param>
-    public Usuario(string nome, string email, string rm, string senhaHash, string role = "User")
+    public Usuario(string nome, string email, string senhaHash, string role = "User")
     {
         Id = Guid.NewGuid();
         Nome = nome;
         Email = email;
-        Rm = rm;
         SenhaHash = senhaHash;
         Ativo = true;
         Nivel = "RECRUTA";        // Todo piloto começa como recruta

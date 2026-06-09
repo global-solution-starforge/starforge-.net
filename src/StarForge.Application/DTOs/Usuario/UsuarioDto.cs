@@ -13,9 +13,6 @@ public record UsuarioDto(
     /// <summary>E-mail de acesso.</summary>
     string Email,
 
-    /// <summary>RM do aluno FIAP.</summary>
-    string Rm,
-
     /// <summary>Nível atual do piloto (RECRUTA, OPERATIVO, VETERANO ou COMANDANTE).</summary>
     string Nivel,
 

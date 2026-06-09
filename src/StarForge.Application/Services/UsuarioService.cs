@@ -20,13 +20,9 @@ public class UsuarioService(IUsuarioRepository usuarioRepo) : IUsuarioService
         if (await usuarioRepo.GetByEmailAsync(dto.Email) is not null)
             throw new BusinessRuleException($"Já existe um usuário com o e-mail '{dto.Email}'.");
 
-        // Garante unicidade de RM (identificador acadêmico FIAP)
-        if (await usuarioRepo.GetByRmAsync(dto.Rm) is not null)
-            throw new BusinessRuleException($"Já existe um usuário com o RM '{dto.Rm}'.");
-
         // Gera o hash BCrypt antes de criar a entidade — nunca persiste senha em texto puro
         var hash = BCrypt.Net.BCrypt.HashPassword(dto.Senha);
-        var usuario = new Usuario(dto.Nome, dto.Email, dto.Rm, hash, dto.Role);
+        var usuario = new Usuario(dto.Nome, dto.Email, hash, dto.Role);
 
         await usuarioRepo.AddAsync(usuario);
         await usuarioRepo.SaveChangesAsync();
@@ -82,5 +78,5 @@ public class UsuarioService(IUsuarioRepository usuarioRepo) : IUsuarioService
     /// Mapeia a entidade <see cref="Usuario"/> para o DTO de resposta, omitindo dados sensíveis.
     /// </summary>
     private static UsuarioDto MapToDto(Usuario u) =>
-        new(u.Id, u.Nome, u.Email, u.Rm, u.Nivel, u.TotalContribuido, u.Ativo, u.Role, u.DataCadastro);
+        new(u.Id, u.Nome, u.Email, u.Nivel, u.TotalContribuido, u.Ativo, u.Role, u.DataCadastro);
 }

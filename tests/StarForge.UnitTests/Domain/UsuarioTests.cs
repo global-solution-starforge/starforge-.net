@@ -5,7 +5,7 @@ namespace StarForge.UnitTests.Domain;
 public class UsuarioTests
 {
     private static Usuario CriarUsuario() =>
-        new("Tiago Costa", "tiago@fiap.com.br", "RM12345", "hash");
+        new("Tiago Costa", "tiago@fiap.com.br", "hash");
 
     [Fact]
     public void AdicionarContribuicao_MenorQue100_DeveManterRecrutaNivel()

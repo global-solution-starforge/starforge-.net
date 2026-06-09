@@ -13,9 +13,6 @@ public record CriarUsuarioDto(
     /// <summary>E-mail único de acesso. Utilizado como login.</summary>
     [Required][EmailAddress][MaxLength(100)] string Email,
 
-    /// <summary>RM do aluno FIAP (mín. 2, máx. 20 caracteres). Deve ser único na plataforma.</summary>
-    [Required][MinLength(2)][MaxLength(20)] string Rm,
-
     /// <summary>Senha em texto puro (mín. 6, máx. 100 caracteres). Será armazenada como hash BCrypt.</summary>
     [Required][MinLength(6)][MaxLength(100)] string Senha,
 

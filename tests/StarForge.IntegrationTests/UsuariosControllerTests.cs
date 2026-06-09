@@ -15,7 +15,6 @@ public class UsuariosControllerTests(StarForgeWebApplicationFactory factory)
         var dto = new CriarUsuarioDto(
             "João Piloto",
             $"joao_{Guid.NewGuid():N}@fiap.com.br",
-            $"RM{Random.Shared.Next(10000, 99999)}",
             "Senha@123456"
         );
 
@@ -33,14 +32,12 @@ public class UsuariosControllerTests(StarForgeWebApplicationFactory factory)
     public async Task PostUsuario_EmailDuplicado_DeveRetornar422()
     {
         var email = $"dup_{Guid.NewGuid():N}@fiap.com.br";
-        var rm1 = $"RM{Random.Shared.Next(10000, 99999)}";
-        var rm2 = $"RM{Random.Shared.Next(10000, 99999)}";
 
         await _client.PostAsJsonAsync("/api/usuarios",
-            new CriarUsuarioDto("Piloto 1", email, rm1, "Senha@123456"));
+            new CriarUsuarioDto("Piloto 1", email, "Senha@123456"));
 
         var response = await _client.PostAsJsonAsync("/api/usuarios",
-            new CriarUsuarioDto("Piloto 2", email, rm2, "Senha@123456"));
+            new CriarUsuarioDto("Piloto 2", email, "Senha@123456"));
 
         Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
     }

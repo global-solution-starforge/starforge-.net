@@ -39,7 +39,7 @@ public class ContribuicaoServiceTests
     [Fact]
     public async Task ConfirmarAsync_DeveAtualizarNivelDoUsuario()
     {
-        var usuario = new Usuario("Piloto", "piloto@fiap.com.br", "RM001", "hash");
+        var usuario = new Usuario("Piloto", "piloto@fiap.com.br", "hash");
         var missaoId = Guid.NewGuid();
         var tierId = Guid.NewGuid();
         var missao = new Missao("Missão X", "Desc", 10000m, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(30));
@@ -62,7 +62,7 @@ public class ContribuicaoServiceTests
     [Fact]
     public async Task ConfirmarAsync_QuandoMetaAtingida_DeveDefinirMissaoComoConcluida()
     {
-        var usuario = new Usuario("Piloto", "piloto@fiap.com.br", "RM001", "hash");
+        var usuario = new Usuario("Piloto", "piloto@fiap.com.br", "hash");
         var missaoId = Guid.NewGuid();
         var tierId = Guid.NewGuid();
         var missao = new Missao("Missão Y", "Desc", 100m, DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(30));
@@ -84,7 +84,7 @@ public class ContribuicaoServiceTests
     [Fact]
     public async Task ConfirmarAsync_QuandoMetaAtingida_DeveDesbloquearHangares()
     {
-        var usuario = new Usuario("Piloto", "piloto@fiap.com.br", "RM001", "hash");
+        var usuario = new Usuario("Piloto", "piloto@fiap.com.br", "hash");
         var missaoId = Guid.NewGuid();
         var tierId = Guid.NewGuid();
         var naveId = Guid.NewGuid();

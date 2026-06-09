@@ -16,11 +16,5 @@ public interface IUsuarioRepository : IRepositoryBase<Usuario>
     /// <returns>O usuário encontrado, ou <c>null</c> se não existir.</returns>
     Task<Usuario?> GetByEmailAsync(string email);
 
-    /// <summary>
-    /// Busca um usuário pelo RM (Registro do Modelo) do aluno FIAP.
-    /// Utilizado para validar unicidade de RM ao criar conta.
-    /// </summary>
-    /// <param name="rm">RM do aluno (ex.: "RM12345").</param>
-    /// <returns>O usuário encontrado, ou <c>null</c> se não existir.</returns>
-    Task<Usuario?> GetByRmAsync(string rm);
+
 }

@@ -21,11 +21,4 @@ public class UsuarioRepository(StarForgeDbContext context) : RepositoryBase<Usua
     public async Task<Usuario?> GetByEmailAsync(string email) =>
         await _context.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
 
-    /// <inheritdoc />
-    /// <remarks>
-    /// Usado pelo <c>UsuarioService</c> para garantir que o RM é único entre os cadastros.
-    /// O RM é o identificador institucional do aluno FIAP.
-    /// </remarks>
-    public async Task<Usuario?> GetByRmAsync(string rm) =>
-        await _context.Usuarios.FirstOrDefaultAsync(u => u.Rm == rm);
 }

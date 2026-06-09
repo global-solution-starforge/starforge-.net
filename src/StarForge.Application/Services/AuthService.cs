@@ -58,7 +58,7 @@ public class AuthService(IUsuarioRepository usuarioRepo, IConfiguration config) 
         );
 
         var usuarioDto = new UsuarioDto(
-            usuario.Id, usuario.Nome, usuario.Email, usuario.Rm,
+            usuario.Id, usuario.Nome, usuario.Email,
             usuario.Nivel, usuario.TotalContribuido, usuario.Ativo,
             usuario.Role, usuario.DataCadastro
         );
