@@ -2,6 +2,17 @@
 
 > **FIAP — Global Solution 2026/1 · Advanced Business Development with .NET**
 
+## Turma: 2TDSPW
+
+| Integrante | RM |
+|---|---|
+| Anna Clara Russo Luca | 561928 |
+| Gabriel Duarte Maciel | 565754 |
+| Gustavo Tavarez | 562827 |
+| Tiago Guedes da Costa | 564731 |
+
+---
+
 Plataforma de **crowdfunding espacial** para missões interestelares. Pilotos se cadastram, escolhem missões ativas, contribuem financeiramente selecionando um tier de recompensa e, quando a missão atinge a meta, recebem uma nave espacial desbloqueada no hangar. A API cobre todo o ciclo: cadastro de usuários com progressão de nível, gerenciamento de missões e tiers pelo administrador, ciclo completo de contribuições (pendente → confirmada), hangar de naves e fases de missão.
 
 ---
@@ -792,6 +803,11 @@ starforge-.net/
 
 ## Integrantes
 
+**Turma:** 2TDSPW
+
 | Nome | RM |
 |---|---|
-| Tiago Costa | RM564731 |
+| Anna Clara Russo Luca | 561928 |
+| Gabriel Duarte Maciel | 565754 |
+| Gustavo Tavarez | 562827 |
+| Tiago Guedes da Costa | 564731 |
