@@ -533,15 +533,14 @@ Headers: Authorization: Bearer {{token}}
 | Código | Descrição | Implementação |
 |---|---|---|
 | RN-001 | E-mail único — cadastro rejeitado se e-mail já existe | `UsuarioService.CriarAsync` → 422 |
-| RN-002 | RM único — cadastro rejeitado se RM já existe | `UsuarioService.CriarAsync` → 422 |
-| RN-003 | `DataInicio` deve ser anterior a `DataLimite` ao criar missão | `MissaoService.CriarAsync` → 422 |
-| RN-004 | Missão só aceita contribuições com status `Ativa` | `ContribuicaoService.CriarAsync` → 422 |
-| RN-005 | Tier esgotado não aceita mais contribuições | `Tier.OcuparVaga()` → `DomainException` → 422 |
-| RN-006 | Confirmar contribuição: ocupa vaga no tier + atualiza nível do piloto + registra arrecadação | `ContribuicaoService.ConfirmarAsync` |
-| RN-007 | Missão concluída (meta atingida): todos os hangares da missão desbloqueados automaticamente | `ContribuicaoService.ConfirmarAsync` |
-| RN-008 | Missão falhou (prazo expirado sem meta): contribuições pendentes marcadas para `Reembolso` | `ContribuicaoService.ConfirmarAsync` |
-| RN-009 | Cancelar contribuição remove o hangar pendente associado — evita registro órfão | `ContribuicaoService.CancelarAsync` |
-| RN-010 | Nível calculado automaticamente: RECRUTA (<R$100) / OPERATIVO (R$100–499) / VETERANO (R$500–1999) / COMANDANTE (≥R$2.000) | `Usuario.AdicionarContribuicao()` |
+| RN-002 | `DataInicio` deve ser anterior a `DataLimite` ao criar missão | `MissaoService.CriarAsync` → 422 |
+| RN-003 | Missão só aceita contribuições com status `Ativa` | `ContribuicaoService.CriarAsync` → 422 |
+| RN-004 | Tier esgotado não aceita mais contribuições | `Tier.OcuparVaga()` → `DomainException` → 422 |
+| RN-005 | Confirmar contribuição: ocupa vaga no tier + atualiza nível do piloto + registra arrecadação | `ContribuicaoService.ConfirmarAsync` |
+| RN-006 | Missão concluída (meta atingida): todos os hangares da missão desbloqueados automaticamente | `ContribuicaoService.ConfirmarAsync` |
+| RN-007 | Missão falhou (prazo expirado sem meta): contribuições pendentes marcadas para `Reembolso` | `ContribuicaoService.ConfirmarAsync` |
+| RN-008 | Cancelar contribuição remove o hangar pendente associado — evita registro órfão | `ContribuicaoService.CancelarAsync` |
+| RN-009 | Nível calculado automaticamente: RECRUTA (<R$100) / OPERATIVO (R$100–499) / VETERANO (R$500–1999) / COMANDANTE (≥R$2.000) | `Usuario.AdicionarContribuicao()` |
 
 ---
 
@@ -555,7 +554,6 @@ classDiagram
         +Guid Id
         +string Nome
         +string Email
-        +string Rm
         -string SenhaHash
         +bool Ativo
         +string Nivel
