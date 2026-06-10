@@ -1,8 +1,8 @@
 # StarForge API
 
 > **FIAP — Global Solution 2026/1 · Advanced Business Development with .NET**
-Links arquitetura: https://youtu.be/NiTM72Upums
-> 
+>
+Links arquitetura: https://youtu.be/NiTM72Upums 
 Vídeo Pitch: https://youtu.be/4ADkytuLn3k
 ## Turma: 2TDSPW
 
